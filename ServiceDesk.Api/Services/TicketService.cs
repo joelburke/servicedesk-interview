@@ -13,7 +13,7 @@ public class TicketService : ITicketService
         _context = context;
     }
 
-    public async Task<TeamMember?> FindAvailableAssigneeAsync()
+    public async Task<TeamMember?> FindFirstAvailableAsigneeNotAtTicketCapacityAsync()
     {
         var result =  _context.TeamMembers.Select(tm => new
         {
@@ -24,5 +24,22 @@ public class TicketService : ITicketService
         .OrderBy(x => x.TicketCount);
         
         return await Task.FromResult(result.FirstOrDefault()?.TeamMember);
+    }
+
+    public async Task<Ticket?> CreateTicketAsync(string title, string description)
+    {
+        var assignee = await FindFirstAvailableAsigneeNotAtTicketCapacityAsync();
+        if (assignee == null) return null;
+
+        var ticket = new Ticket
+        {
+            Title = title,
+            Description = description,
+            AssignedTo = assignee
+        };
+
+        _context.Tickets.Add(ticket);
+        await _context.SaveChangesAsync();
+        return ticket;
     }
 }

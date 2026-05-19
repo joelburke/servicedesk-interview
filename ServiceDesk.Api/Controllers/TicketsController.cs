@@ -41,19 +41,9 @@ public class TicketsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateTicketRequest request)
     {
-        var ticket = new Ticket
-        {
-            Title = request.Title,
-            Description = request.Description
-        };
-
-        var assignee = await _ticketService.FindAvailableAssigneeAsync();
-        if (assignee == null) return BadRequest("No available team members to assign the ticket to.");
-            
-        ticket.AssignedTo = assignee;
-
-        _context.Tickets.Add(ticket);
-        await _context.SaveChangesAsync();
+        var ticket = await _ticketService.CreateTicketAsync(request.Title, request.Description);
+        if (ticket == null) return BadRequest("No available team members to assign the ticket to.");
+        
         return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
     }
 

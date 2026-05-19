@@ -27,7 +27,7 @@ public class TicketServiceTests
         var ticketService = new TicketService(_context);
 
         // Act
-        var result = ticketService.FindAvailableAssigneeAsync();
+        var result = ticketService.FindFirstAvailableAsigneeNotAtTicketCapacityAsync();
 
         // Assert
         Assert.NotNull(result);
@@ -40,7 +40,7 @@ public class TicketServiceTests
         var ticketService = new TicketService(_context);
 
         // Act
-        var result = ticketService.FindAvailableAssigneeAsync();
+        var result = ticketService.FindFirstAvailableAsigneeNotAtTicketCapacityAsync();
         var teamMember = await result;
         
         // Assert
@@ -55,7 +55,7 @@ public class TicketServiceTests
         var ticketService = new TicketService(_context);
 
         // Act
-        var result = ticketService.FindAvailableAssigneeAsync();
+        var result = ticketService.FindFirstAvailableAsigneeNotAtTicketCapacityAsync();
         var teamMember = await result;
         
         // Assert
