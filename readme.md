@@ -13,3 +13,11 @@ Create a pair programming interview that I can practice for this job in .net and
 ### Context
 1. Recording transcript of first interview
 1. Job description
+
+## Task
+
+Your task as driver: Implement FindAvailableAssigneeAsync in TicketService.cs so that it returns the team member who currently has the fewest open tickets, as long as they haven't hit their MaxCapacity. Then wire it into the Create action in the controller.
+
+This is exactly the kind of problem Mitch described — not super complex, but it reveals how you think: do you ask clarifying questions, do you reach out for input, do you consider edge cases?
+
+So — before you write any code, what questions do you have for me about the requirements?
