@@ -23,7 +23,7 @@ public class TicketService : ITicketService
         .Where(x => x.TicketCount < x.TeamMember.MaxCapacity)
         .OrderBy(x => x.TicketCount);
         
-        return await Task.FromResult(result.FirstOrDefault()?.TeamMember);
+        return await result.Select(x => x.TeamMember).FirstOrDefaultAsync();
     }
 
     public async Task<Ticket?> CreateTicketAsync(string title, string description)
