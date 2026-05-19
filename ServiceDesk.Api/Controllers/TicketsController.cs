@@ -2,17 +2,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceDesk.Api.Data;
 using ServiceDesk.Api.Models;
+using ServiceDesk.Api.Services;
 
 namespace ServiceDesk.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TicketsController(AppDbContext context) : ControllerBase
+public class TicketsController : ControllerBase
 {
+    private readonly AppDbContext _context;
+    private readonly ITicketService _ticketService;
+    public TicketsController(AppDbContext context, ITicketService ticketService)
+    {
+        _context = context;
+        _ticketService = ticketService;
+    }
+    
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var tickets = await context.Tickets
+        var tickets = await _context.Tickets
             .Include(t => t.AssignedTo)
             .ToListAsync();
         return Ok(tickets);
@@ -21,7 +30,7 @@ public class TicketsController(AppDbContext context) : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var ticket = await context.Tickets
+        var ticket = await _context.Tickets
             .Include(t => t.AssignedTo)
             .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -38,32 +47,35 @@ public class TicketsController(AppDbContext context) : ControllerBase
             Description = request.Description
         };
 
-        // TODO: auto-assign to a team member here
+        var assignee = await _ticketService.FindAvailableAssigneeAsync();
+        if (assignee == null) return BadRequest("No available team members to assign the ticket to.");
+            
+        ticket.AssignedTo = assignee;
 
-        context.Tickets.Add(ticket);
-        await context.SaveChangesAsync();
+        _context.Tickets.Add(ticket);
+        await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
     }
 
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
     {
-        var ticket = await context.Tickets.FindAsync(id);
+        var ticket = await _context.Tickets.FindAsync(id);
         if (ticket == null) return NotFound();
 
         ticket.Status = request.Status;
-        await context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var ticket = await context.Tickets.FindAsync(id);
+        var ticket = await _context.Tickets.FindAsync(id);
         if (ticket == null) return NotFound();
 
-        context.Tickets.Remove(ticket);
-        await context.SaveChangesAsync();
+        _context.Tickets.Remove(ticket);
+        await _context.SaveChangesAsync();
         return NoContent();
     }
 }

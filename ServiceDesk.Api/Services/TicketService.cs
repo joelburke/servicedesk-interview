@@ -20,8 +20,8 @@ public class TicketService : ITicketService
             TeamMember = tm,
             TicketCount = tm.Tickets.Count
         })
-        .Where(x => x.TicketCount < x.TeamMember.MaxCapacity);
-
+        .Where(x => x.TicketCount < x.TeamMember.MaxCapacity)
+        .OrderBy(x => x.TicketCount);
         
         return await Task.FromResult(result.FirstOrDefault()?.TeamMember);
     }
