@@ -4,5 +4,6 @@ namespace ServiceDesk.Api.Services;
 
 public interface ITicketService
 {
-    Task<TeamMember?> FindAvailableAssigneeAsync();
+    Task<TeamMember?> FindFirstAvailableAsigneeNotAtTicketCapacityAsync();
+    Task<Ticket?> CreateTicketAsync(string title, string description);
 }
