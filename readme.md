@@ -3,7 +3,7 @@ The purpose of this project is to use claude code to setup a pair programming in
 ## Installables/Requirements
 1. Install Git and GitGUI for windows, create account, login
 1. Install Claude code, get pro subscription
-1. Install VS Code
+1. Ask claude to install the items you need for this project on your local machine (.Net, node.js, git for windows, vs code) - review windows verification prompts opening in the background
 
 ## Claude Prompt
 
@@ -108,5 +108,9 @@ I wanted to document some impressive things I'm noticing
 Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
       An unhandled exception has occurred while executing the request.
       System.Text.Json.JsonException: A possible object cycle was detected. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32. Consider using ReferenceHandler.Preserve on JsonSerializerOptions to support cycles. Path: $.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Id.
-   1. 
+   1. it recommended 2 fixes to this, the first i didn't like, it was quick and dirty: telling the json serializer to ignore cycles. The second is to map EF's objects to DTOs and return the DTOs instead, only returning the data we need to the front end.
+   1. I had it write a test to verify this before fixing it, and it read the style of my other tests and mimiced my style and naming convention, which was impressive.
+   1. Upon writing a test for this and implementing the fix, the test still failed because the json setting was only implemented in the program.cs pipeline and the unit tests didn't run this.  This is a bad implementation because anything besides the UI (backend jobs for instance) would have this same error.  It asked if I was ready to implement the DTO implementation and I confirmed. It generated a todo list, even cleaning up the prior implementation and my comments explaining it. 
+   1. It also updated all of the endpoints returning DTOs but added a lot of duplication in the process. 
+
     

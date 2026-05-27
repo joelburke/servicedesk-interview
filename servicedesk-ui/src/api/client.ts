@@ -2,11 +2,15 @@ const BASE = '/api';
 
 export type TicketStatus = 'Open' | 'InProgress' | 'Resolved' | 'Closed';
 
-export interface TeamMember {
+export interface TeamMemberSummary {
   id: number;
   name: string;
-  maxCapacity: number;
-  tickets: Ticket[];
+}
+
+export interface TicketSummary {
+  id: number;
+  title: string;
+  status: TicketStatus;
 }
 
 export interface Ticket {
@@ -15,8 +19,15 @@ export interface Ticket {
   description: string;
   status: TicketStatus;
   assignedToId: number | null;
-  assignedTo: TeamMember | null;
+  assignedTo: TeamMemberSummary | null;
   createdAt: string;
+}
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  maxCapacity: number;
+  tickets: TicketSummary[];
 }
 
 // TODO (Interview Problem 2): add an optional `status` parameter and include it as a query string when provided

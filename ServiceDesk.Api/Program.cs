@@ -11,8 +11,10 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()));
 
 builder.Services.AddControllers();
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseInMemoryDatabase("ServiceDesk"));
+
 builder.Services.AddScoped<ITicketService, TicketService>();
 
 var app = builder.Build();
