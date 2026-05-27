@@ -97,13 +97,6 @@ Look for `// TODO (Interview Problem 2)` comments in:
 - `servicedesk-ui/src/api/client.ts` — one TODO
 - `ServiceDesk.Api/Controllers/TicketsController.cs` — needs new query param + filter
 
-### Starting up the application
-1. Terminal 1
-`cd ServiceDesk.Api && dotnet run`
-1. Terminal 2
-`cd servicedesk-ui && npm run dev`
-1. Open http://localhost:5173
-
 # Observations
 I wanted to document some impressive things I'm noticing
 1. The first prompt completely setup a working .net project including controllers, service layer, data layer, entity framework, testing layer, prompting to install .net 9 locally. I asked it why not 10, it searched the internet, found 10, and installed that instead.
@@ -111,3 +104,9 @@ I wanted to document some impressive things I'm noticing
 1. The second prompt I wanted it to build in a react front end to polish up my front end skills and wire it to the back end
 1. It installed node.js locally, setup a new `-ui` project complete with HTML and depedencies, chose vite as the lightweight server/host, setup linting rules and added linters, gave me 3 commands to get the project running locally, noticed I started documenting in these readme files and updated the readme file to include the 2nd interview question above. Color me officially impressed.
 1. I asked it for the session logs of claude code because they weren't showing up in my claude history in other applications and using powershell it searched my local machine for 8 different places until it found them in `C:\Users\Joel\.claude\projects\c--dev-mh-interview\`
+1. running the application for the first time and everything renders correctly even showing each user and extablished ticket maximums for each, but on adding a new ticket I get this error below
+Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+      An unhandled exception has occurred while executing the request.
+      System.Text.Json.JsonException: A possible object cycle was detected. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32. Consider using ReferenceHandler.Preserve on JsonSerializerOptions to support cycles. Path: $.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Tickets.AssignedTo.Id.
+   1. 
+    
